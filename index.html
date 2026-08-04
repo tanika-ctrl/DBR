@@ -7,28 +7,29 @@
 <meta name="description" content="DBR — something new is coming.">
 <style>
   :root{
-    --bg: #0a0a0a;
-    --bg-soft: #111111;
-    --fg: #f5f5f0;
-    --fg-dim: #8a8a85;
-    --accent: #d4ff5a;
-    --line: rgba(245,245,240,0.14);
+    --bg: #000000;
+    --bg-soft: #252D37;
+    --fg: #f5f2ea;
+    --fg-dim: #8C784B;
+    --accent: #E75B12;
+    --line: rgba(140,120,75,0.28);
     --ease: cubic-bezier(.16,1,.3,1);
   }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
 
-  html{ scroll-behavior:smooth; background:var(--bg); }
+  html{ scroll-behavior:smooth; background:var(--bg); overflow-x:hidden; width:100%; }
 
   body{
     background:var(--bg);
     color:var(--fg);
     font-family:'Neue Haas Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif;
     overflow-x:hidden;
+    width:100%;
     -webkit-font-smoothing:antialiased;
   }
 
-  ::selection{ background:var(--accent); color:#0a0a0a; }
+  ::selection{ background:var(--accent); color:#000000; }
 
   /* ---------- Noise / grain overlay ---------- */
   .grain{
@@ -45,8 +46,9 @@
     mix-blend-mode:difference;
   }
   .logo{
-    font-size:1rem; font-weight:600; letter-spacing:0.28em;
-    text-transform:uppercase; color:var(--fg);
+    height:44px;
+    width:auto;
+    display:block;
   }
   .nav-cta{
     font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase;
@@ -64,12 +66,28 @@
     position:relative;
     padding:0 1.5rem;
     text-align:center;
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(212,255,90,0.06), transparent 70%),
-      var(--bg);
+    overflow:hidden;
+    background:var(--bg);
   }
 
-  .hero-inner{ position:relative; z-index:2; }
+  .hero-video{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    z-index:0;
+    pointer-events:none;
+  }
+
+  .hero::after{
+    content:'';
+    position:absolute; inset:0;
+    z-index:1;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(231,91,18,0.10), transparent 70%),
+      linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(37,45,55,0.35) 40%, rgba(0,0,0,0.7));
+  }
+
+  .hero-inner{ position:relative; z-index:3; max-width:100%; min-width:0; }
 
   .eyebrow{
     display:block;
@@ -88,6 +106,8 @@
     line-height:1.02;
     letter-spacing:-0.03em;
     color:var(--fg);
+    max-width:100%;
+    overflow-wrap:break-word;
   }
   h1.headline .word{
     display:inline-block;
@@ -108,13 +128,9 @@
   .scroll-cue{
     position:absolute; bottom:3rem; left:50%; transform:translateX(-50%);
     display:flex; flex-direction:column; align-items:center; gap:0.75rem;
-    z-index:2;
+    z-index:3;
     opacity:0;
     animation: fadeUp 1s var(--ease) 1.4s forwards;
-  }
-  .scroll-cue span{
-    font-size:0.68rem; letter-spacing:0.3em; text-transform:uppercase;
-    color:var(--fg-dim);
   }
   .scroll-line{
     width:1px; height:42px;
@@ -139,8 +155,8 @@
     font-weight:700;
     letter-spacing:-0.04em;
     color:transparent;
-    -webkit-text-stroke:1px rgba(245,245,240,0.05);
-    z-index:1;
+    -webkit-text-stroke:1px rgba(140,120,75,0.22);
+    z-index:2;
     pointer-events:none;
     user-select:none;
   }
@@ -152,16 +168,37 @@
     text-align:center;
     padding:8rem 1.5rem;
     position:relative;
+    z-index:0;
     background:var(--bg-soft);
     border-top:1px solid var(--line);
   }
 
-  .tag{
-    font-size:0.75rem; letter-spacing:0.35em; text-transform:uppercase;
-    color:var(--fg-dim); margin-bottom:2rem;
+  .tri-bg{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    z-index:0;
+    pointer-events:none;
+  }
+
+  .tri-bg polygon{
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: triFloat var(--dur, 14s) ease-in-out infinite alternate;
+    animation-delay: var(--delay, 0s);
+  }
+
+  @keyframes triFloat{
+    0%{ transform: translate(0, 0) rotate(0deg); }
+    100%{ transform: translate(var(--tx, 12px), var(--ty, -14px)); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .tri-bg polygon{ animation: none; }
   }
 
   .reveal-section h2{
+    position:relative;
+    z-index:1;
     font-size:clamp(1.9rem, 5.5vw, 3.6rem);
     font-weight:500;
     line-height:1.15;
@@ -172,9 +209,10 @@
 
   .btn-preorder{
     position:relative;
+    z-index:1;
     display:inline-flex; align-items:center; gap:0.9rem;
     background:var(--accent);
-    color:#0a0a0a;
+    color:#000000;
     font-size:0.95rem;
     font-weight:600;
     letter-spacing:0.02em;
@@ -185,81 +223,15 @@
     cursor:pointer;
     overflow:hidden;
     transition: transform .5s var(--ease), box-shadow .5s var(--ease);
-    box-shadow:0 0 0 0 rgba(212,255,90,0.4);
+    box-shadow:0 0 0 0 rgba(231,91,18,0.4);
   }
   .btn-preorder:hover{
     transform:translateY(-3px);
-    box-shadow:0 12px 40px -8px rgba(212,255,90,0.45);
+    box-shadow:0 12px 40px -8px rgba(231,91,18,0.5);
   }
   .btn-preorder:active{ transform:translateY(-1px); }
   .btn-preorder .arrow{ transition: transform .4s var(--ease); }
   .btn-preorder:hover .arrow{ transform:translateX(4px); }
-
-  .sub-note{
-    margin-top:1.75rem;
-    font-size:0.82rem;
-    color:var(--fg-dim);
-    letter-spacing:0.02em;
-  }
-
-  /* ---------- Contact ---------- */
-  .contact{
-    background:var(--bg);
-    padding:7rem 1.5rem 5rem;
-    border-top:1px solid var(--line);
-  }
-  .contact-inner{
-    max-width:640px;
-    margin:0 auto;
-  }
-  .contact-head{ text-align:center; margin-bottom:3.5rem; }
-  .contact-head .tag{ margin-bottom:1.25rem; }
-  .contact-head h3{
-    font-size:clamp(1.6rem, 4vw, 2.4rem);
-    font-weight:500;
-    letter-spacing:-0.02em;
-  }
-
-  form{ display:flex; flex-direction:column; gap:1.6rem; }
-  .field{ display:flex; flex-direction:column; gap:0.6rem; }
-  .field label{
-    font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase;
-    color:var(--fg-dim);
-  }
-  .field input, .field textarea{
-    background:transparent;
-    border:none;
-    border-bottom:1px solid var(--line);
-    color:var(--fg);
-    font-family:inherit;
-    font-size:1.05rem;
-    padding:0.7rem 0.1rem;
-    outline:none;
-    transition: border-color .35s var(--ease);
-  }
-  .field input::placeholder, .field textarea::placeholder{ color:#4a4a46; }
-  .field input:focus, .field textarea:focus{ border-color:var(--accent); }
-  .field textarea{ resize:vertical; min-height:100px; }
-
-  .row-2{ display:grid; grid-template-columns:1fr 1fr; gap:1.6rem; }
-  @media (max-width:560px){ .row-2{ grid-template-columns:1fr; } }
-
-  .submit-btn{
-    align-self:flex-start;
-    margin-top:1rem;
-    background:transparent;
-    color:var(--fg);
-    border:1px solid var(--fg);
-    font-family:inherit;
-    font-size:0.85rem;
-    letter-spacing:0.1em;
-    text-transform:uppercase;
-    padding:1rem 2.2rem;
-    border-radius:100px;
-    cursor:pointer;
-    transition: background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
-  }
-  .submit-btn:hover{ background:var(--accent); border-color:var(--accent); color:#0a0a0a; }
 
   footer{
     text-align:center;
@@ -270,15 +242,16 @@
     border-top:1px solid var(--line);
   }
 
-  /* Scroll reveal utility */
+  /* Scroll reveal utility — visible by default; JS opts elements into the pre-reveal state */
   .fade-in{
-    opacity:0; transform:translateY(28px);
     transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
   }
-  .fade-in.in-view{ opacity:1; transform:translateY(0); }
+  .js-armed .fade-in{ opacity:0; transform:translateY(28px); }
+  .js-armed .fade-in.in-view{ opacity:1; transform:translateY(0); }
 
   @media (max-width:640px){
     header{ padding:1.5rem 1.25rem; }
+    h1.headline{ font-size:clamp(1.9rem, 9.5vw, 6.2rem); }
   }
 </style>
 </head>
@@ -287,12 +260,15 @@
 <div class="grain"></div>
 
 <header>
-  <div class="logo">DBR</div>
-  <a class="nav-cta" href="#preorder">Enquire</a>
+  <img class="logo" src="dbr%20logo%20wht%20rgb.svg" alt="DBR">
+  <a class="nav-cta" href="mailto:sales@dbr-rigs.com?subject=Build%20slot%20enquiry">Enquire</a>
 </header>
 
 <!-- Section 1 -->
 <section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto">
+    <source src="Test%20Blurred%20video%20for%20landing%20page.mp4" type="video/mp4">
+  </video>
   <div class="hero-inner">
     <span class="eyebrow">Something is coming</span>
     <h1 class="headline" aria-label="The rumours are true...">
@@ -303,47 +279,30 @@
     </h1>
   </div>
   <div class="scroll-cue">
-    <span>Scroll</span>
     <div class="scroll-line"></div>
   </div>
 </section>
 
 <!-- Section 2 -->
 <section class="reveal-section" id="preorder">
-  <div class="tag fade-in">Limited availability</div>
-  <h2 class="fade-in">Build slots for the next chapter of DBR are opening.</h2>
-  <a href="#contact" class="btn-preorder fade-in">
-    Preorder build slots available now. Enquire today.
+  <svg class="tri-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <polygon points="1292,-26 1422,-26 1357,59" fill="#8C784B" fill-opacity="0.46" style="--dur:8s;--delay:-2s;--tx:34px;--ty:-26px"/>
+    <polygon points="901,72 1094,72 997,226" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:10s;--delay:-5s;--tx:-30px;--ty:34px"/>
+    <polygon points="1145,338 1242,338 1192,417" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:7s;--delay:-1s;--tx:26px;--ty:-30px"/>
+    <polygon points="1195,280 1385,280 1290,425" fill="none" stroke="#8C784B" stroke-width="3" style="--dur:9s;--delay:-7s;--tx:-26px;--ty:38px"/>
+    <polygon points="1230,480 1370,480 1300,580" fill="#8C784B" fill-opacity="0.4" style="--dur:7s;--delay:-3s;--tx:22px;--ty:-26px"/>
+    <polygon points="1310,680 1500,680 1405,820" fill="none" stroke="#8C784B" stroke-width="3" style="--dur:10s;--delay:-9s;--tx:-34px;--ty:26px"/>
+    <polygon points="1330,830 1520,830 1425,940" fill="#8C784B" fill-opacity="0.46" style="--dur:6s;--delay:-4s;--tx:30px;--ty:-22px"/>
+    <polygon points="54,386 256,706 -148,706" fill="#8C784B" fill-opacity="0.46" style="--dur:8s;--delay:-6s;--tx:-26px;--ty:30px"/>
+    <polygon points="164,450 216,535 112,535" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:6s;--delay:-2s;--tx:26px;--ty:-34px"/>
+    <polygon points="157,742 270,965 43,965" fill="#8C784B" fill-opacity="0.46" style="--dur:11s;--delay:-8s;--tx:-22px;--ty:26px"/>
+    <polygon points="356,647 454,801 259,801" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:8s;--delay:-5s;--tx:30px;--ty:-30px"/>
+  </svg>
+  <h2 class="fade-in">Be among the first to drill with DBR</h2>
+  <a href="mailto:sales@dbr-rigs.com?subject=Build%20slot%20enquiry" class="btn-preorder fade-in">
+    Preorder build slots available now.
     <span class="arrow">→</span>
   </a>
-  <div class="sub-note fade-in">No commitment required — just tell us you're interested.</div>
-</section>
-
-<!-- Contact -->
-<section class="contact" id="contact">
-  <div class="contact-inner">
-    <div class="contact-head fade-in">
-      <div class="tag">Get in touch</div>
-      <h3>Enquire about a build slot</h3>
-    </div>
-    <form class="fade-in" onsubmit="handleSubmit(event)">
-      <div class="row-2">
-        <div class="field">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" placeholder="Your name" required>
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="you@email.com" required>
-        </div>
-      </div>
-      <div class="field">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" placeholder="Tell us a little about what you're after..."></textarea>
-      </div>
-      <button type="submit" class="submit-btn">Send enquiry</button>
-    </form>
-  </div>
 </section>
 
 <footer>
@@ -353,7 +312,10 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Scroll-reveal
+  // Scroll-reveal — arm the hidden pre-reveal state only once JS is confirmed running
+  document.documentElement.classList.add('js-armed');
+
+  const fadeEls = document.querySelectorAll('.fade-in');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -363,21 +325,10 @@
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  fadeEls.forEach(el => observer.observe(el));
 
-  // Contact form (front-end only placeholder)
-  function handleSubmit(e){
-    e.preventDefault();
-    const btn = e.target.querySelector('.submit-btn');
-    const original = btn.textContent;
-    btn.textContent = 'Enquiry sent ✓';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = original;
-      btn.disabled = false;
-      e.target.reset();
-    }, 2600);
-  }
+  // Safety net: guarantee visibility even if the observer never fires
+  setTimeout(() => fadeEls.forEach(el => el.classList.add('in-view')), 2500);
 </script>
 
 </body>
