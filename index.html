@@ -8,7 +8,6 @@
 <style>
   :root{
     --bg: #000000;
-    --bg-soft: #252D37;
     --fg: #f5f2ea;
     --fg-dim: #8C784B;
     --accent: #E75B12;
@@ -125,27 +124,6 @@
     to{ opacity:1; }
   }
 
-  .scroll-cue{
-    position:absolute; bottom:3rem; left:50%; transform:translateX(-50%);
-    display:flex; flex-direction:column; align-items:center; gap:0.75rem;
-    z-index:3;
-    opacity:0;
-    animation: fadeUp 1s var(--ease) 1.4s forwards;
-  }
-  .scroll-line{
-    width:1px; height:42px;
-    background:linear-gradient(to bottom, var(--fg-dim), transparent);
-    position:relative; overflow:hidden;
-  }
-  .scroll-line::after{
-    content:''; position:absolute; top:-100%; left:0; width:100%; height:100%;
-    background:var(--accent);
-    animation: scrollDrip 1.8s ease-in-out infinite;
-  }
-  @keyframes scrollDrip{
-    0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; }
-  }
-
   /* faint background monogram */
   .hero::before{
     content:'DBR';
@@ -161,50 +139,10 @@
     user-select:none;
   }
 
-  /* ---------- Section 2: Preorder ---------- */
-  .reveal-section{
-    min-height:100svh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center;
-    padding:8rem 1.5rem;
-    position:relative;
-    z-index:0;
-    background:var(--bg-soft);
-    border-top:1px solid var(--line);
-  }
-
-  .tri-bg{
-    position:absolute; inset:0;
-    width:100%; height:100%;
-    z-index:0;
-    pointer-events:none;
-  }
-
-  .tri-bg polygon{
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: triFloat var(--dur, 14s) ease-in-out infinite alternate;
-    animation-delay: var(--delay, 0s);
-  }
-
-  @keyframes triFloat{
-    0%{ transform: translate(0, 0) rotate(0deg); }
-    100%{ transform: translate(var(--tx, 12px), var(--ty, -14px)); }
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .tri-bg polygon{ animation: none; }
-  }
-
-  .reveal-section h2{
-    position:relative;
-    z-index:1;
-    font-size:clamp(1.9rem, 5.5vw, 3.6rem);
-    font-weight:500;
-    line-height:1.15;
-    letter-spacing:-0.02em;
-    max-width:20ch;
-    margin-bottom:3.5rem;
+  .hero-cta{
+    margin-top:2.5rem;
+    opacity:0;
+    animation: fadeUp 1s var(--ease) 1s forwards;
   }
 
   .btn-preorder{
@@ -242,13 +180,6 @@
     border-top:1px solid var(--line);
   }
 
-  /* Scroll reveal utility — visible by default; JS opts elements into the pre-reveal state */
-  .fade-in{
-    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-  }
-  .js-armed .fade-in{ opacity:0; transform:translateY(28px); }
-  .js-armed .fade-in.in-view{ opacity:1; transform:translateY(0); }
-
   @media (max-width:640px){
     header{ padding:1.5rem 1.25rem; }
     h1.headline{ font-size:clamp(1.9rem, 9.5vw, 6.2rem); }
@@ -277,32 +208,11 @@
       <span class="word" style="animation-delay:0.6s">are</span>
       <span class="word" style="animation-delay:0.7s">true<span class="accent-dots">...</span></span>
     </h1>
+    <a href="mailto:sales@dbr-rigs.com?subject=Build%20slot%20enquiry" class="btn-preorder hero-cta">
+      Preorder build slots available now.
+      <span class="arrow">→</span>
+    </a>
   </div>
-  <div class="scroll-cue">
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- Section 2 -->
-<section class="reveal-section" id="preorder">
-  <svg class="tri-bg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <polygon points="1292,-26 1422,-26 1357,59" fill="#8C784B" fill-opacity="0.46" style="--dur:8s;--delay:-2s;--tx:34px;--ty:-26px"/>
-    <polygon points="901,72 1094,72 997,226" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:10s;--delay:-5s;--tx:-30px;--ty:34px"/>
-    <polygon points="1145,338 1242,338 1192,417" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:7s;--delay:-1s;--tx:26px;--ty:-30px"/>
-    <polygon points="1195,280 1385,280 1290,425" fill="none" stroke="#8C784B" stroke-width="3" style="--dur:9s;--delay:-7s;--tx:-26px;--ty:38px"/>
-    <polygon points="1230,480 1370,480 1300,580" fill="#8C784B" fill-opacity="0.4" style="--dur:7s;--delay:-3s;--tx:22px;--ty:-26px"/>
-    <polygon points="1310,680 1500,680 1405,820" fill="none" stroke="#8C784B" stroke-width="3" style="--dur:10s;--delay:-9s;--tx:-34px;--ty:26px"/>
-    <polygon points="1330,830 1520,830 1425,940" fill="#8C784B" fill-opacity="0.46" style="--dur:6s;--delay:-4s;--tx:30px;--ty:-22px"/>
-    <polygon points="54,386 256,706 -148,706" fill="#8C784B" fill-opacity="0.46" style="--dur:8s;--delay:-6s;--tx:-26px;--ty:30px"/>
-    <polygon points="164,450 216,535 112,535" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:6s;--delay:-2s;--tx:26px;--ty:-34px"/>
-    <polygon points="157,742 270,965 43,965" fill="#8C784B" fill-opacity="0.46" style="--dur:11s;--delay:-8s;--tx:-22px;--ty:26px"/>
-    <polygon points="356,647 454,801 259,801" fill="none" stroke="#8C784B" stroke-width="1.5" style="--dur:8s;--delay:-5s;--tx:30px;--ty:-30px"/>
-  </svg>
-  <h2 class="fade-in">Be among the first to drill with DBR</h2>
-  <a href="mailto:sales@dbr-rigs.com?subject=Build%20slot%20enquiry" class="btn-preorder fade-in">
-    Preorder build slots available now.
-    <span class="arrow">→</span>
-  </a>
 </section>
 
 <footer>
@@ -311,24 +221,6 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  // Scroll-reveal — arm the hidden pre-reveal state only once JS is confirmed running
-  document.documentElement.classList.add('js-armed');
-
-  const fadeEls = document.querySelectorAll('.fade-in');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  fadeEls.forEach(el => observer.observe(el));
-
-  // Safety net: guarantee visibility even if the observer never fires
-  setTimeout(() => fadeEls.forEach(el => el.classList.add('in-view')), 2500);
 </script>
 
 </body>
